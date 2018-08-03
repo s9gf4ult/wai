@@ -271,7 +271,7 @@ fork set mkConn addr app counter ii0 = settingsFork set $ \unmask ->
         -- We grab the connection before registering timeouts since the
         -- timeouts will be useless during connection creation, due to the
         -- fact that async exceptions are still masked.
-        bracket mkConn (cleanUp ref) (serve unmask ref)
+        bracket (settingsConnWrapper set mkConn) (cleanUp ref) (serve unmask ref)
   where
     withClosedRef inner = newIORef False >>= inner
 
